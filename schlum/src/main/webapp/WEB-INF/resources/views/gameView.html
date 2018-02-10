@@ -1,47 +1,128 @@
 
-<div class="ui grid">
+<div class="ui inverted segment" ng-init="fetchAllGames()">
+<div class="ui inverted secondary pointing huge menu">
+  <div class="header item">
+  <i class="gamepad icon"></i>
+    Game Library
+  </div>
+  <a class="item" ng-click="fetchGamesView('random')" ng-class="{'active':activeElement=='random'}">
+    Random Games
+  </a>
+  <a class="item" ng-click="fetchGamesView('editorChoice')" ng-class="{'active':activeElement=='editorChoice'}">
+    Editor Choice Games
+  </a>
+  <a class="item" ng-click="fetchGamesView('search')" ng-class="{'active':activeElement=='search'}">
+    Search Games
+  </a>
+  <div class="right menu">
+ 
+    
+    <div class="item">
+        <div class="ui primary button">Log Out</div>
+    </div>
+  </div>
+  
+  
+</div>
+</div>
+<div class="ui grid ">
+	 <div class="thirteen wide centered column" ng-show="activeElement=='search'"> 
+		<div class="ui red card fluid">
+			<div class="content">
+				<div class="ui grid container">
+					<div class="five wide column middle aligned content">
+						<div>
+							<b>Search Games by {{type}}</b>
+						</div>
+					</div>
+					<div class="six wide column middle aligned content"></div>
+					<div class="five wide column middle aligned content">
+						<div class="ui input focus" style="width: 100%">
+							<input type="text" ng-model="search" placeholder="Filter">
+						</div>
+					</div>
+					<div class="sixteen wide column middle aligned content">
+						<div class="ui form">
+							<div class="inline fields">
+								<label>Select Search Category</label>
+								<div class="field">
+									<div class="ui toggle checkbox">
+										<input type="radio" name="category" checked="checked"
+											ng-click="type='Title'"> <label>Title</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui toggle checkbox">
+										<input type="radio" name="category" ng-click="type='Genre'">
+										<label>Genre</label>
+									</div>
+								</div>
+								<div class="field">
+									<div class="ui toggle checkbox">
+										<input type="radio" name="category" ng-click="type='Platform'">
+										<label>Platform</label>
+									</div>
+								</div>
 
-	<div class="thirteen wide column" ng-init="fetchAllGames()">
-		<div class="ui raised segment light fixed"
-			style="background-color: #b1beca">
-			<div class="ui container">
-				<div class="ui large secondary network menu">
-					<div class="item">
-						<div class="ui logo shape">
-							<div class="sides">
-								<h3 class="active ui side">Game List</h3>
+							</div>
+						</div>
+						<div class="ui grid">
+						<div class="six wide column content" ng-show="type=='Genre'">
+						<div class="ui fluid search selection dropdown item" >
+							<i class="dropdown icon"></i> 
+							<input type="hidden" name="genre" ng-model="genre"> <i class="dropdown icon"></i>
+							<div class="default text">Select Genre</div>
+							<div class="menu">
+								<div class="item" ng-repeat="genre1 in genres" data-value="{{genre1}}"  ng-click="setGenre(genre1)">{{genre1}}</div>
+							</div>
+						</div>
+						</div>
+						<div class="six wide column content" ng-show="type=='Platform'">
+						<div class="ui fluid search selection dropdown item" >
+							<i class="dropdown icon"></i> 
+							<input type="hidden" name="platform" > <i class="dropdown icon"></i>
+							<div class="default text">Select Platform</div>
+							<div class="menu">
+								<div class="item" ng-repeat="platform1 in platforms" data-value="{{platform1}}"  ng-click="setPlatform(platform1)">{{platform1}}</div>
+							</div>
+						</div>
+						</div>
+						
+						<div class="ten wide column content">
+							<div class="ui action input">
+								<input type="text" ng-model="searchTerm" ng-change="setSearchTerm(searchTerm)">
+								<button class="ui teal right labeled icon button"
+								 ng-disabled="(searchTerm!=null && searchTerm!='' && type=='Title') " 
+								 ng-click="fetchGames(type)">
+									<i class="search icon"></i> Search
+								</button>
 							</div>
 						</div>
 					</div>
-
-					<div class="right menu">
-
-						<div class="ui language floating dropdown link item"
-							id="languages">
-							<i class="world icon"></i>
-							<div class="text">English</div>
-						</div>
-						<div class="ui language floating dropdown link item "
-							id="languages">
-							<a href="{{contextpath}}logout"><i class="sign out icon"></i>
-								Logout </a>
-
-						</div>
-
 					</div>
+					<br> <br>
 				</div>
 			</div>
 		</div>
 
 		<br> <br>
-		<div class="ui grid">
+		
+
+
+		</div></div>
+<div ng-init="load()"></div>
+
+
+<div id="result">
+<br><br>
+<div class="ui grid" ng-if="activeElement=='random'">
 			<div class="fifteen wide centered column">
 				<div class="ui card fluid">
 					<div class="content">
 						<div class="ui grid container">
 							<div class="five wide column middle aligned content">
 								<div>
-									<b>Your Games </b>
+									<b>Filter Games </b>
 								</div>
 							</div>
 							<div class="six wide column middle aligned content"></div>
@@ -57,19 +138,65 @@
 				</div>
 			</div>
 		</div>
-		<br>
-
-
-		</div></div>
+		<br><br>
+		<div class="ui centered grid">
+		<div class="fifteen wide column">
+		<div class="ui card fluid">
+	<div class="content">
+	<div class="header" ng-if="activeElement=='random'">Random Games</div>
+	<div class="header" ng-if="activeElement!='random'">Search Results</div>
+	</div><div class="content">
+	<div class="ui equal width centered grid">
+					<div class="seven wide column" ng-repeat="game in allGames| filter:search">
+						<div class="ui card fluid" >
+							<div class="content heading2">
+								
+								<a class="ui ribbon label"  ng-class="{ orange:game.platform=='PC', green:game.platform=='PlayStation', blue:game.platform=='Nintendo 64'}" ng-bind="game.platform"></a> 
+								      <b><span class="bold" ng-bind="game.title"></span></b>
+								      <span class="bold" style="float:right" >{{game.release_year}}</span>
+							</div>
+							
+							<div class="content" ng-class="{'body2':game.editors_choice , 'body3':!game.editors_choice  }">
+								<div class="meta" ng-bind="game.genre"></div>
+								<div class="description" ng-bind="game.url"></div>
+							</div>
+							<div class="extra content">
+							<div class="ui rating" data-rating="{{Math.ceil(game.score)}}" data-max-rating="10"></div>
+								
+							</div>
+							<div ng-init="load2()"></div>
+						</div>
+						<br>
+						</div>
+						
+				</div>
+				<br>
+					<div class="ui right floated pagination menu">
+						<a class="icon item"> <i class="left chevron icon"></i></a>
+						<a class="item" ng-repeat="page">1</a> 
+						<a class="item">2</a>
+						 <a class="item">3</a>
+						<a class="item">4</a>
+						 <a class="icon item"> <i
+							class="right chevron icon"></i>
+						</a>
+					</div>
+				</div></div></div></div>
+	
+			</div>
+		
 
 <style>
-body{
+/* body{
 background: #ADA996;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to right, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);  /* Chrome 10-25, Safari 5.1-6 */
 background: linear-gradient(to right, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-}
+} */
 
+body{
+background-color: #6c8eab;
+}
 .wd100{
 	
 }
@@ -80,5 +207,11 @@ background: linear-gradient(to right, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996); /* W3
 
 .heading2{
 	background-color:#6d8196 !important;
+}
+.body2{
+	background-color:#667896 !important;
+}
+.body3{
+	background-color:#3d8196 !important;
 }
 </style>

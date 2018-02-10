@@ -95,4 +95,34 @@ public class ViewController {
 		return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
 	}
 	
+	
+	@RequestMapping(value = "/fetch-platform/{platform}/{search}/{limit}/{offset}", method = RequestMethod.GET)
+	public ResponseEntity<List<Game>> getGamesByPlatform(@PathVariable("platform") String platform, @PathVariable("search") String search,
+			@PathVariable("limit") Integer limit,
+			@PathVariable("offset") Integer offset){
+		List<Game> games = null;
+		try{
+			games= gameService.fetchByPlatform(platform,search,limit,offset);
+		}
+		catch(Exception e){
+			return new ResponseEntity<List<Game>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/fetch-genre/{genre}/{search}/{limit}/{offset}", method = RequestMethod.GET)
+	public ResponseEntity<List<Game>> getGamesByGenre(@PathVariable("genre") String genre, @PathVariable("search") String search,
+			@PathVariable("limit") Integer limit,
+			@PathVariable("offset") Integer offset){
+		List<Game> games = null;
+		try{
+			games= gameService.fetchByGenre(genre,search,limit,offset);
+		}
+		catch(Exception e){
+			return new ResponseEntity<List<Game>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
+	}
 }

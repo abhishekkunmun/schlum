@@ -24,23 +24,9 @@
 	</head>
 
 	<body ng-app="game" ng-controller="gameCtrl" ng-cloak>
-	<div id="sidebar"  class="ui left vertical menu sidebar inverted visible abhi">
-	<a class = "item">
-		<i class="huge home icon"></i>
-		<h3>Game Library</h3>
-	</a>
-    <a class="item" ng-class="{'active':item=='all'}">
-      All Games
-      <i class="calendar icon"></i>
-    </a>
-    <a class="item" ng-class="{'active':item=='add'}" ng-click="addUI()">
-      Search for Game
-      <i class="add to calendar icon"></i>
-    </a>
-   
-  </div>
+	
   <div class="pusher">
-   <div class="ui active dimmer">
+   <div class="ui dimmer">
     <div class="ui indeterminate text loader">Fetching Games</div>
   </div>
     <div ng-include="contextpath+'resources/views/gameView.html'"></div>	
