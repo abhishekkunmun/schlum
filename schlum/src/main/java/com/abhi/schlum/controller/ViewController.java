@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.abhi.schlum.model.Game;
+import com.abhi.schlum.model.SearchGames;
 import com.abhi.schlum.service.GameService;
 
 
@@ -48,81 +49,97 @@ public class ViewController {
 		return "login"; 
 	}
 	
+
+	
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home( Model model) {	
-		model.addAttribute("userName", "abhishek");
-		return "home";
-	}
-	
-	@RequestMapping(value = "/portal", method = RequestMethod.GET)
-	public String portal( Model model) {	
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	      String name = auth.getName(); 
 
 	      model.addAttribute("userName", name);
 		
-		return "portal";
+		return "home";
 	}
 	
 	
 	
 	@RequestMapping(value = "/fetch-all/{gameName}/{limit}/{offset}", method = RequestMethod.GET)
-	public ResponseEntity<List<Game>> getGames(@PathVariable("gameName") String gameName, 
+	public ResponseEntity<SearchGames> getGames(@PathVariable("gameName") String gameName, 
 			@PathVariable("limit") Integer limit,
 			@PathVariable("offset") Integer offset){
-		List<Game> games = null;
+		SearchGames games = null;
 		try{
 			games= gameService.fetchAllGames(gameName,limit,offset);
 		}
 		catch(Exception e){
-			return new ResponseEntity<List<Game>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+			return new ResponseEntity<SearchGames>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
+		return new ResponseEntity<SearchGames>(games,HttpStatus.OK);
 	}
 	@RequestMapping(value = "/fetch-random/{limit}/{offset}", method = RequestMethod.GET)
-	public ResponseEntity<List<Game>> getRandomGames(
+	public ResponseEntity<SearchGames> getRandomGames(
 			@PathVariable("limit") Integer limit,
 			@PathVariable("offset") Integer offset){
-		List<Game> games = null;
+		SearchGames games = null;
 		try{
 			games= gameService.fetchRandomGames(limit,offset);
 		}
 		catch(Exception e){
-			return new ResponseEntity<List<Game>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+			return new ResponseEntity<SearchGames>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
+		return new ResponseEntity<SearchGames>(games,HttpStatus.OK);
 	}
 	
 	
 	@RequestMapping(value = "/fetch-platform/{platform}/{search}/{limit}/{offset}", method = RequestMethod.GET)
-	public ResponseEntity<List<Game>> getGamesByPlatform(@PathVariable("platform") String platform, @PathVariable("search") String search,
+	public ResponseEntity<SearchGames> getGamesByPlatform(@PathVariable("platform") String platform, @PathVariable("search") String search,
 			@PathVariable("limit") Integer limit,
 			@PathVariable("offset") Integer offset){
-		List<Game> games = null;
+		SearchGames games = null;
 		try{
 			games= gameService.fetchByPlatform(platform,search,limit,offset);
 		}
 		catch(Exception e){
-			return new ResponseEntity<List<Game>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+			return new ResponseEntity<SearchGames>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
+		return new ResponseEntity<SearchGames>(games,HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/fetch-genre/{genre}/{search}/{limit}/{offset}", method = RequestMethod.GET)
-	public ResponseEntity<List<Game>> getGamesByGenre(@PathVariable("genre") String genre, @PathVariable("search") String search,
+	public ResponseEntity<SearchGames> getGamesByGenre(@PathVariable("genre") String genre, @PathVariable("search") String search,
 			@PathVariable("limit") Integer limit,
 			@PathVariable("offset") Integer offset){
-		List<Game> games = null;
+		SearchGames games = null;
 		try{
 			games= gameService.fetchByGenre(genre,search,limit,offset);
 		}
 		catch(Exception e){
-			return new ResponseEntity<List<Game>>(HttpStatus.INTERNAL_SERVER_ERROR);
+			e.printStackTrace();
+			return new ResponseEntity<SearchGames>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
+		return new ResponseEntity<SearchGames>(games,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/fetch-ec/{limit}/{offset}", method = RequestMethod.GET)
+	public ResponseEntity<SearchGames> getGamesEC(
+			@PathVariable("limit") Integer limit,
+			@PathVariable("offset") Integer offset){
+		SearchGames games = null;
+		try{
+			games= gameService.fetchECGames(limit,offset);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return new ResponseEntity<SearchGames>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<SearchGames>(games,HttpStatus.OK);
 	}
 }

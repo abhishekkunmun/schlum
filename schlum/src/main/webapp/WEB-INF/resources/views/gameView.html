@@ -18,7 +18,9 @@
  
     
     <div class="item">
-        <div class="ui primary button">Log Out</div>
+    <a href="{{contextpath}}logout" class="ui primary button"><i class="sign out icon"></i>
+								Logout </a>
+        
     </div>
   </div>
   
@@ -92,7 +94,7 @@
 							<div class="ui action input">
 								<input type="text" ng-model="searchTerm" ng-change="setSearchTerm(searchTerm)">
 								<button class="ui teal right labeled icon button"
-								 ng-disabled="(searchTerm!=null && searchTerm!='' && type=='Title') " 
+								 ng-disabled="type=='Title' && (searchTerm==null || searchTerm=='' ) " 
 								 ng-click="fetchGames(type)">
 									<i class="search icon"></i> Search
 								</button>
@@ -100,7 +102,7 @@
 						</div>
 					</div>
 					</div>
-					<br> <br>
+					
 				</div>
 			</div>
 		</div>
@@ -143,8 +145,9 @@
 		<div class="fifteen wide column">
 		<div class="ui card fluid">
 	<div class="content">
-	<div class="header" ng-if="activeElement=='random'">Random Games</div>
-	<div class="header" ng-if="activeElement!='random'">Search Results</div>
+	<div class="header" ng-if="activeElement=='random'">Random Games - Click on Tab to fetch 10 random games</div>
+	<div class="header" ng-if="activeElement=='search'">Search Results - {{resultSize}} Results</div>
+	<div class="header" ng-if="activeElement=='editorChoice'">Editor's Choice Games - Click on Tab to fetch 10 random games</div>
 	</div><div class="content">
 	<div class="ui equal width centered grid">
 					<div class="seven wide column" ng-repeat="game in allGames| filter:search">
@@ -153,7 +156,10 @@
 								
 								<a class="ui ribbon label"  ng-class="{ orange:game.platform=='PC', green:game.platform=='PlayStation', blue:game.platform=='Nintendo 64'}" ng-bind="game.platform"></a> 
 								      <b><span class="bold" ng-bind="game.title"></span></b>
-								      <span class="bold" style="float:right" >{{game.release_year}}</span>
+								      <span class="bold" style="float:right; margin-right:8%" >{{game.release_year}}</span>
+								      <a class="ui red right corner label" ng-show="game.editors_choice">
+       										 <i class="heart icon"></i>
+     									 </a>
 							</div>
 							
 							<div class="content" ng-class="{'body2':game.editors_choice , 'body3':!game.editors_choice  }">
@@ -161,7 +167,7 @@
 								<div class="description" ng-bind="game.url"></div>
 							</div>
 							<div class="extra content">
-							<div class="ui rating" data-rating="{{Math.ceil(game.score)}}" data-max-rating="10"></div>
+							<div class="ui rating" data-rating="{{ret(game.score)}}" data-max-rating="10"></div>
 								
 							</div>
 							<div ng-init="load2()"></div>
@@ -172,13 +178,9 @@
 				</div>
 				<br>
 					<div class="ui right floated pagination menu">
-						<a class="icon item"> <i class="left chevron icon"></i></a>
-						<a class="item" ng-repeat="page">1</a> 
-						<a class="item">2</a>
-						 <a class="item">3</a>
-						<a class="item">4</a>
-						 <a class="icon item"> <i
-							class="right chevron icon"></i>
+						<a class="icon item" ng-click="previousPage()" ng-class="{'disabled':currentPage==1}"> <i class="left chevron icon"></i></a>
+						<a class="item" ng-class="{'active':pageNumber==currentPage}" ng-repeat="pageNumber in pageNumbers" ng-click="loadPage(pageNumber)">{{pageNumber}}</a> 
+						 <a class="icon item" ng-click="nextPage()" ng-class="{'disabled':currentPage==pagesCount}"> <i class="right chevron icon"  ></i>
 						</a>
 					</div>
 				</div></div></div></div>
@@ -194,9 +196,7 @@ background: linear-gradient(to right, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996); /* W3
 
 } */
 
-body{
-background-color: #6c8eab;
-}
+
 .wd100{
 	
 }
@@ -209,9 +209,9 @@ background-color: #6c8eab;
 	background-color:#6d8196 !important;
 }
 .body2{
-	background-color:#667896 !important;
+	background-color:#efd7ca !important;
 }
 .body3{
-	background-color:#3d8196 !important;
+	background-color:#baecc9 !important;
 }
 </style>

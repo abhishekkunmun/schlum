@@ -25,12 +25,19 @@
 
 	<body ng-app="game" ng-controller="gameCtrl" ng-cloak>
 	
-  <div class="pusher">
-   <div class="ui dimmer">
-    <div class="ui indeterminate text loader">Fetching Games</div>
-  </div>
+  
     <div ng-include="contextpath+'resources/views/gameView.html'"></div>	
+  
+	<div class="ui page dimmer" ng-class="{'active':loading}">
+  <div class="content">
+  <div class="ui large text loader">Fetching Games</div>
+    
   </div>
-		
+</div>	
+<style>
+body{
+	background: #6c8eab !important;
+}
+</style>
 	</body>
 </html>
