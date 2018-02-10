@@ -67,7 +67,7 @@ public class ViewController {
 	
 	
 	@RequestMapping(value = "/fetch-all/{gameName}/{limit}/{offset}", method = RequestMethod.GET)
-	public ResponseEntity<List<Game>> getAllData(@PathVariable("gameName") String gameName, 
+	public ResponseEntity<List<Game>> getGames(@PathVariable("gameName") String gameName, 
 			@PathVariable("limit") Integer limit,
 			@PathVariable("offset") Integer offset){
 		List<Game> games = null;
@@ -80,31 +80,19 @@ public class ViewController {
 		
 		return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
 	}
-	
-	/*@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public ResponseEntity<ToDo> postSomeData(@RequestBody Game task){
-		
+	@RequestMapping(value = "/fetch-random/{limit}/{offset}", method = RequestMethod.GET)
+	public ResponseEntity<List<Game>> getRandomGames(
+			@PathVariable("limit") Integer limit,
+			@PathVariable("offset") Integer offset){
+		List<Game> games = null;
 		try{
-			taskService.updateTask(task);
+			games= gameService.fetchRandomGames(limit,offset);
 		}
 		catch(Exception e){
-			e.printStackTrace();
-			return new ResponseEntity<ToDo>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<List<Game>>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<ToDo>(task,HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> postSomeData(@PathVariable("id") Integer id){
 		
-		try{
-			taskService.deleteTask(id);	
-		}
-		catch(Exception e){
-			return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<List<Game>>(games,HttpStatus.OK);
 	}
-	*/
 	
 }

@@ -17,5 +17,12 @@ public class GameService {
 	public List<Game> fetchAllGames(String gameName, Integer limit, Integer offset) {
 		return gameDAO.getAllGamesByName(gameName,limit,offset);
 	}
+	
+	public List<Game> fetchRandomGames( Integer limit, Integer offset) {
+		return gameDAO.getRandomGames(limit,offset);
+	}
+	
+	
+	
 
 }

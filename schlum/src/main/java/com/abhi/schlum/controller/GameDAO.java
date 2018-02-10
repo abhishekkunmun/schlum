@@ -31,7 +31,7 @@ public class GameDAO {
 	  
 	
 	
-	public List<Game> getAllGamesByName(String gameName, int limit, int offset){  
+	public List<Game> getAllGamesByName(String gameName, Integer limit, Integer offset){  
 			 return jdbcTemplate.query("select * from schlum where title like  '%"+gameName+"%' limit "+limit+" offset "+offset,new ResultSetExtractor<List<Game>>(){  
 			     public List<Game> extractData(ResultSet rs) throws SQLException,  
 			            DataAccessException {  
@@ -54,6 +54,30 @@ public class GameDAO {
 			    });  
 			  
 	}  
+	
+	public List<Game> getRandomGames( Integer limit, Integer offset){  
+		 return jdbcTemplate.query("select * from schlum order by random() limit "+limit+" offset "+offset,new ResultSetExtractor<List<Game>>(){  
+		     public List<Game> extractData(ResultSet rs) throws SQLException,  
+		            DataAccessException {  
+		      
+		        List<Game> list=new ArrayList<Game>();  
+		        while(rs.next()){  
+		        	 Game game = new Game();  
+		        	 game.setId(rs.getInt(1));  
+		        	 game.setTitle(rs.getString(2));  
+		             game.setUrl(rs.getString(3));
+		             game.setPlatform(rs.getString(4));
+		             game.setScore(rs.getFloat(5));
+		             game.setGenre(rs.getString(6));
+		             game.setEditors_choice(rs.getBoolean(7));
+		             game.setRelease_year(rs.getInt(8));
+		        list.add(game);  
+		        }  
+		        return list;  
+		        }  
+		    });  
+		  
+}  
 	
 	  
 }
