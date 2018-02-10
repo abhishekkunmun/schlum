@@ -9,6 +9,7 @@ public class Game {
 	private Float score;
 	private String genre;
 	private Boolean editors_choice ;
+	private Integer release_year;
 	public Integer getId() {
 		return id;
 	}
@@ -57,5 +58,5 @@ public class Game {
 	public void setRelease_year(Integer release_year) {
 		this.release_year = release_year;
 	}
-	private Integer release_year;
+	
 }

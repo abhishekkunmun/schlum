@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Service;
 
 import com.abhi.schlum.model.Game;
-import com.abhi.schlum.model.ToDoMapper;
+import com.abhi.schlum.model.GameMapper;
 
 
 
@@ -31,29 +31,24 @@ public class GameDAO {
 	  
 	
 	
-	public List<Game> getAllGamesByNamer(String gameName, int limit){  
-			 return jdbcTemplate.query("select * from schlum.schlum where game like  '%"+gameName+"%'",new ResultSetExtractor<List<Game>>(){  
-			    @Override  
+	public List<Game> getAllGamesByName(String gameName, int limit){  
+			 return jdbcTemplate.query("select distinct(*) from schlum where title like  '%"+gameName+"%'",new ResultSetExtractor<List<Game>>(){  
 			     public List<Game> extractData(ResultSet rs) throws SQLException,  
 			            DataAccessException {  
 			      
 			        List<Game> list=new ArrayList<Game>();  
 			        while(rs.next()){  
-			        	Game t=new Game();  
-			        t.setId(rs.getInt(1));  
-			        t.setName(rs.getString(2));  
-			        t.setUserName(rs.getString(3));
-			        t.setMeta(rs.getString(4));
-			        t.setDescription(rs.getString(5));
-			        t.setStatus(rs.getString(6));
+			        	 Game game = new Game();  
+			        	 game.setId(rs.getInt(1));  
+			        	 game.setTitle(rs.getString(2));  
+			             game.setUrl(rs.getString(3));
+			             game.setPlatform(rs.getString(4));
+			             game.setScore(rs.getFloat(5));
+			             game.setGenre(rs.getString(6));
+			             game.setEditors_choice(rs.getBoolean(7));
+			             game.setRelease_year(rs.getInt(8));
 			        
-			    	
-			       
-			        t.setPriority(rs.getInt(8));
-			        t.setDate(rs.getDate(9));
-			        t.setCreated(rs.getDate(10));
-			        
-			        list.add(t);  
+			        list.add(game);  
 			        }  
 			        return list;  
 			        }  
@@ -61,14 +56,5 @@ public class GameDAO {
 			  
 	}  
 	
-	public Game getGameById(Integer taskId){
-		String sql = "select * from hackerearth.todo where id = ?";
-
-		ToDo task = (ToDo)jdbcTemplate.queryForObject(
-				sql, new Object[] { taskId },
-				new ToDoMapper());
-
-		return task;
-	}
 	  
 }
