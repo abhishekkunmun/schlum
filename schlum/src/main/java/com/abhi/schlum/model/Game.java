@@ -13,6 +13,11 @@ public class Game {
 	public Integer getId() {
 		return id;
 	}
+	@Override
+	public String toString() {
+		return "Game [id=" + id + ", title=" + title + ", url=" + url + ", platform=" + platform + ", score=" + score
+				+ ", genre=" + genre + ", editors_choice=" + editors_choice + ", release_year=" + release_year + "]";
+	}
 	public void setId(Integer id) {
 		this.id = id;
 	}

@@ -66,14 +66,13 @@ public class ViewController {
 	
 	
 	
-	@RequestMapping(value = "/fetch-all/{gameName}", method = RequestMethod.GET)
-	public ResponseEntity<List<Game>> getAllData(@PathVariable("gameName") String gameName){
+	@RequestMapping(value = "/fetch-all/{gameName}/{limit}/{offset}", method = RequestMethod.GET)
+	public ResponseEntity<List<Game>> getAllData(@PathVariable("gameName") String gameName, 
+			@PathVariable("limit") Integer limit,
+			@PathVariable("offset") Integer offset){
 		List<Game> games = null;
 		try{
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		      String name = auth.getName(); 
-
-			games= gameService.fetchAllGames(gameName);
+			games= gameService.fetchAllGames(gameName,limit,offset);
 		}
 		catch(Exception e){
 			return new ResponseEntity<List<Game>>(HttpStatus.INTERNAL_SERVER_ERROR);

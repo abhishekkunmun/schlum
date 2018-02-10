@@ -31,8 +31,8 @@ public class GameDAO {
 	  
 	
 	
-	public List<Game> getAllGamesByName(String gameName, int limit){  
-			 return jdbcTemplate.query("select distinct(*) from schlum where title like  '%"+gameName+"%'",new ResultSetExtractor<List<Game>>(){  
+	public List<Game> getAllGamesByName(String gameName, int limit, int offset){  
+			 return jdbcTemplate.query("select * from schlum where title like  '%"+gameName+"%' limit "+limit+" offset "+offset,new ResultSetExtractor<List<Game>>(){  
 			     public List<Game> extractData(ResultSet rs) throws SQLException,  
 			            DataAccessException {  
 			      
@@ -47,7 +47,6 @@ public class GameDAO {
 			             game.setGenre(rs.getString(6));
 			             game.setEditors_choice(rs.getBoolean(7));
 			             game.setRelease_year(rs.getInt(8));
-			        
 			        list.add(game);  
 			        }  
 			        return list;  
